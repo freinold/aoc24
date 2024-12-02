@@ -3,9 +3,6 @@ with open("input") as file:
         map(lambda report: [int(val) for val in report.split()], file.readlines())
     )
 
-n_safe_reports = 0
-bad_reports = list()
-
 
 def is_report_safe(report: list[int]) -> tuple[bool, int]:
     previous_level: int = report[0]
@@ -32,24 +29,38 @@ def is_report_safe(report: list[int]) -> tuple[bool, int]:
     return len(report) == checked_index, checked_index - 1
 
 
+n_safe_reports = 0
+
 for report in reports:
     is_safe, index = is_report_safe(report)
     if is_safe:
         n_safe_reports += 1
         continue
 
-    rm_first_report = report.copy()
-    rm_first_report.pop(index)
-    is_safe_rm_first, _ = is_report_safe(rm_first_report)
-    if is_safe_rm_first:
+    report_rm_index = report.copy()
+    report_rm_index.pop(index)
+    is_safe_rm_index, _ = is_report_safe(report_rm_index)
+    if is_safe_rm_index:
         n_safe_reports += 1
         continue
 
-    rm_secound_report = report.copy()
-    rm_secound_report.pop(index + 1)
-    is_safe_rm_second, _ = is_report_safe(rm_secound_report)
-    if is_safe_rm_second:
+    if index > 0:
+        report_rm_before = report.copy()
+        report_rm_before.pop(index - 1)
+        is_safe_rm_before, _ = is_report_safe(report_rm_before)
+        if is_safe_rm_before:
+            n_safe_reports += 1
+            continue
+
+    report_rm_after = report.copy()
+    report_rm_after.pop(index + 1)
+    is_safe_rm_after, _ = is_report_safe(report_rm_after)
+    if is_safe_rm_after:
         n_safe_reports += 1
+    else:
+        print(
+            f"Deemed still unsafe:\n{report=}\n{report_rm_index=}\n{report_rm_after=}\n\n"
+        )
 
 
 print(f"Number of safe reports with dampener: {n_safe_reports}")
