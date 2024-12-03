@@ -16,7 +16,6 @@ similarity_score = 0
 
 for left_val, right_val in zip(left_list, right_list):
     difference = abs(left_val - right_val)
-    # print(f"{left_val = }; {right_val =}; {difference =}")
     similarity_score += difference
 
 print(f"Similarity score by sorted difference: {similarity_score}")
