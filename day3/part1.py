@@ -3,6 +3,7 @@ import re
 with open("input") as file:
     input = file.read()
 
+# thx to https://regex101.com/
 pattern = r"mul\((?P<factor1>[0-9]{1,3}),(?P<factor2>[0-9]{1,3})\)"
 
 multiplication_sum = 0
