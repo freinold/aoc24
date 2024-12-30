@@ -2,8 +2,9 @@ import numpy as np
 
 STARTING_LOCATION: str = "^"
 
+
 def main() -> None:
-    with open("stub") as file:
+    with open("input") as file:
         input_string: str = file.read()
 
     list2d: list[list[str]] = list()
@@ -18,46 +19,46 @@ def main() -> None:
     y, x = int(y[0]), int(x[0])
     visited_locations[y, x] = 1
     heading = "North"
-    
+
     turns: dict[str, str] = {
         "North": "East",
         "East": "South",
         "South": "West",
-        "West": "North"
+        "West": "North",
     }
 
-    
+    moves: dict[str, tuple[int, int]] = {
+        "North": (-1, 0),
+        "East": (0, 1),
+        "South": (1, 0),
+        "West": (0, -1),
+    }
 
-    def move(heading: str, x: int, y: int):
+    def move(heading: str, x: int, y: int) -> tuple[str, int, int]:
+        dy, dx = moves[heading]
+        new_x, new_y = x + dx, y + dy
 
+        if new_x < 0 or new_x >= array.shape[1] or new_y < 0 or new_y >= array.shape[0]:
+            # Finished
+            raise StopIteration
+        if array[new_y, new_x] == "#":
+            # Turn right
+            heading = turns[heading]
+        else:
+            # Move forward
+            x, y = new_x, new_y
+            visited_locations[y, x] = 1
+
+        return heading, x, y
 
     while True:
-        match heading:
-            case "North":
-                if array[y - 1, x] == "#":
-                    heading == "East"
-                else:
-                    y -= 1
-                    visited_locations[y, x] == 1
-            case "East":
-                if array[y, x + 1] == "#":
-                    heading == "South"
-                else:
-                    x += 1
-                    visited_locations[y, x] == 1
-            case "South":
-                if array[y + 1, x] == "#":
-                    heading == "West"
-                else:
-                    y += 1
-                    visited_locations[y, x] == 1
-            case "West":
-                if array[y, x - 1] == "#":
-                    heading == "North"
-                else:
-                    x -= 1
-                    visited_locations[y, x] == 1
-        
+        try:
+            heading, x, y = move(heading, x, y)
+        except StopIteration:
+            break
+
+    print(f"Visited locations: {visited_locations.sum():.0f}")
+
 
 if __name__ == "__main__":
     main()
