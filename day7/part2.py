@@ -1,6 +1,10 @@
 import math
 from itertools import product
 
+def concatenate_integers(integers: list[int]) -> int:
+    concatenation = "".join(map(str, integers))
+    return int(concatenation)
+
 with open("input") as file:
     input_string = file.read()
 
@@ -15,7 +19,7 @@ for line in input_string.splitlines():
 total_calibration_result = 0
 
 for test_value, numbers in equations:
-    operator_combinations = product([sum, math.prod], repeat=len(numbers) - 1)
+    operator_combinations = product([sum, math.prod, concatenate_integers], repeat=len(numbers) - 1)
     for op_comb in operator_combinations:
         computed_value = numbers[0]
         for i in range(len(op_comb)):
@@ -25,4 +29,4 @@ for test_value, numbers in equations:
             total_calibration_result += test_value
             break
 
-print(f"Total calibration result: {total_calibration_result}")
+print(f"Total calibration result with concatenation: {total_calibration_result}")
